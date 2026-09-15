@@ -1,7 +1,13 @@
+"use client";
+
 import { ChevronRight } from "lucide-react";
+import { useEnterAnimation } from "@/hooks/useEnterAnimation";
+import { AnimatedValue } from "./AnimatedValue";
 import type { DistributionListRow } from "@/lib/dashboard/types";
 
 export function DistributionListCard({ rows }: { rows: DistributionListRow[] }) {
+  const entered = useEnterAnimation();
+
   return (
     <div className="flex h-full w-full flex-col gap-3 rounded-3xl bg-white p-5">
       <h3 className="font-heading text-sm font-bold text-dark-950">Distribution List</h3>
@@ -24,15 +30,20 @@ export function DistributionListCard({ rows }: { rows: DistributionListRow[] }) 
               <div className="flex items-center gap-2">
                 <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-success-900 to-success-500"
-                    style={{ width: `${row.completionRate}%` }}
+                    className="h-full rounded-full bg-gradient-to-r from-success-900 to-success-500 transition-[width] duration-[900ms] ease-out"
+                    style={{
+                      width: `${entered ? row.completionRate : 0}%`,
+                      transitionDelay: `${index * 60}ms`,
+                    }}
                   />
                 </div>
                 <span className="w-8 shrink-0 font-body text-xs text-gray-700">{row.completionRate}%</span>
               </div>
-              <span className="font-heading text-sm font-semibold text-dark-950">{row.leadCount}</span>
+              <span className="font-heading text-sm font-semibold text-dark-950">
+                <AnimatedValue value={String(row.leadCount)} />
+              </span>
               <button type="button" className="flex items-center gap-1 font-heading text-sm font-semibold text-danger-700">
-                {row.notCalled}
+                <AnimatedValue value={String(row.notCalled)} />
                 <ChevronRight className="size-3 text-danger-700" strokeWidth={2} />
               </button>
             </div>

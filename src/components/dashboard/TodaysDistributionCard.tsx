@@ -1,5 +1,6 @@
 import { Users, PhoneCall, PhoneOff, Clock, ShoppingBasket } from "lucide-react";
 import { DashedRadialGauge } from "./charts/DashedRadialGauge";
+import { AnimatedValue } from "./AnimatedValue";
 
 export function TodaysDistributionCard({
   percent,
@@ -34,7 +35,9 @@ export function TodaysDistributionCard({
       </div>
       <div className="flex items-center gap-6">
         <DashedRadialGauge percent={percent}>
-          <p className="font-heading text-2xl font-bold text-primary-600">{percent}%</p>
+          <p className="font-heading text-2xl font-bold text-primary-600">
+            <AnimatedValue value={`${percent}%`} />
+          </p>
           <p className="px-2 text-center font-body text-sm text-gray-600">Unique Connected Call</p>
         </DashedRadialGauge>
         <div className="flex flex-1 flex-col">
@@ -47,7 +50,9 @@ export function TodaysDistributionCard({
                   </div>
                   <span className="font-body text-sm text-dark-950">{row.label}</span>
                 </div>
-                <span className="font-heading text-lg font-bold text-dark-950">{row.value}</span>
+                <span className="font-heading text-lg font-bold text-dark-950">
+                  {row.id === "duration" ? row.value : <AnimatedValue value={String(row.value)} />}
+                </span>
               </div>
               {index !== rows.length - 1 && <div className="h-px w-full bg-gray-200" />}
             </div>

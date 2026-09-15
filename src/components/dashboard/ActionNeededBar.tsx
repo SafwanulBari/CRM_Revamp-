@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArcGauge } from "./charts/ArcGauge";
+import { AnimatedValue } from "./AnimatedValue";
 import type { ActionNeededItem } from "@/lib/dashboard/types";
 
 export function ActionNeededBar({ percent, items }: { percent: number; items: ActionNeededItem[] }) {
@@ -11,7 +12,9 @@ export function ActionNeededBar({ percent, items }: { percent: number; items: Ac
         <p className="absolute top-0 left-0 font-heading text-[15px] font-bold text-dark-950 uppercase">Action needed</p>
         <div className="relative mt-7">
           <ArcGauge percent={percent} width={148} height={78} barSize={14} />
-          <p className="absolute bottom-0 left-1/2 -translate-x-1/2 font-heading text-xl font-bold text-primary-600">{percent}%</p>
+          <p className="absolute bottom-0 left-1/2 -translate-x-1/2 font-heading text-xl font-bold text-primary-600">
+            <AnimatedValue value={`${percent}%`} />
+          </p>
         </div>
       </div>
       <div className="grid flex-1 grid-cols-6 gap-3">
@@ -23,7 +26,9 @@ export function ActionNeededBar({ percent, items }: { percent: number; items: Ac
           >
             <p className="font-body text-xs font-medium text-gray-700">{item.label}</p>
             <div className="flex items-end justify-between">
-              <p className={`font-heading text-2xl font-bold ${item.valueClass}`}>{item.value}</p>
+              <p className={`font-heading text-2xl font-bold ${item.valueClass}`}>
+                <AnimatedValue value={String(item.value)} />
+              </p>
               <Tooltip>
                 <TooltipTrigger
                   aria-label={`About ${item.label}`}

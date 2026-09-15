@@ -1,5 +1,6 @@
 import { ListChecks, Clock, CheckCircle2, DollarSign } from "lucide-react";
 import { DashedRadialGauge } from "./charts/DashedRadialGauge";
+import { AnimatedValue } from "./AnimatedValue";
 
 export function TodaysTaskSummaryCard({
   percent,
@@ -31,7 +32,9 @@ export function TodaysTaskSummaryCard({
       </div>
       <div className="flex items-center gap-6">
         <DashedRadialGauge percent={percent}>
-          <p className="font-heading text-2xl font-bold text-primary-600">{percent}%</p>
+          <p className="font-heading text-2xl font-bold text-primary-600">
+            <AnimatedValue value={`${percent}%`} />
+          </p>
           <p className="font-body text-sm text-gray-600">Task Complete</p>
         </DashedRadialGauge>
         <div className="flex flex-1 flex-col">
@@ -44,7 +47,9 @@ export function TodaysTaskSummaryCard({
                   </div>
                   <span className="font-body text-sm text-dark-950">{row.label}</span>
                 </div>
-                <span className="font-heading text-lg font-bold text-dark-950">{row.value}</span>
+                <span className="font-heading text-lg font-bold text-dark-950">
+                  <AnimatedValue value={String(row.value)} />
+                </span>
               </div>
               {index !== rows.length - 1 && <div className="h-px w-full bg-gray-200" />}
             </div>

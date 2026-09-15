@@ -1,3 +1,7 @@
+"use client";
+
+import { useEnterAnimation } from "@/hooks/useEnterAnimation";
+
 export function DashedRadialGauge({
   percent,
   size = 180,
@@ -6,6 +10,7 @@ export function DashedRadialGauge({
   tickHeight = 14,
   color = "var(--color-primary-500)",
   trackColor = "var(--color-gray-200)",
+  durationMs = 900,
   children,
 }: {
   percent: number;
@@ -15,17 +20,20 @@ export function DashedRadialGauge({
   tickHeight?: number;
   color?: string;
   trackColor?: string;
+  durationMs?: number;
   children?: React.ReactNode;
 }) {
   const clamped = Math.max(0, Math.min(100, percent));
   const filledCount = Math.round((clamped / 100) * tickCount);
   const radius = size / 2 - tickHeight / 2 - 4;
+  const entered = useEnterAnimation();
 
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       {Array.from({ length: tickCount }, (_, i) => {
         const angle = (360 / tickCount) * i;
         const filled = i < filledCount;
+        const tickDelay = filled ? (i / Math.max(1, filledCount)) * durationMs * 0.7 : 0;
         return (
           <span
             key={i}
@@ -33,8 +41,10 @@ export function DashedRadialGauge({
             style={{
               width: tickWidth,
               height: tickHeight,
-              backgroundColor: filled ? color : trackColor,
+              backgroundColor: entered && filled ? color : trackColor,
               transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(${-radius}px)`,
+              transition: "background-color 260ms ease-out",
+              transitionDelay: `${tickDelay}ms`,
             }}
           />
         );

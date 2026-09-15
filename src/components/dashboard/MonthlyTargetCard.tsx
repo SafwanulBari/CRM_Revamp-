@@ -1,5 +1,8 @@
+"use client";
+
 import { BarChart3, Target } from "lucide-react";
 import { ArcGauge } from "./charts/ArcGauge";
+import { AnimatedValue } from "./AnimatedValue";
 
 export function MonthlyTargetCard({
   percent,
@@ -21,7 +24,9 @@ export function MonthlyTargetCard({
         <div className="relative flex flex-1 flex-col items-center">
           <ArcGauge percent={percent} width={220} height={112} barSize={20} />
           <div className="absolute bottom-0 flex flex-col items-center gap-0.5">
-            <p className="font-heading text-4xl font-bold text-primary-600">{percent}%</p>
+            <p className="font-heading text-4xl font-bold text-primary-600">
+              <AnimatedValue value={`${percent}%`} />
+            </p>
             <p className="font-heading text-sm font-medium text-gray-600">Achieved</p>
           </div>
         </div>
@@ -35,14 +40,18 @@ export function MonthlyTargetCard({
                 Revenue
               </p>
             </div>
-            <p className="font-heading text-lg font-bold text-dark-950">{currentRevenue}</p>
+            <p className="font-heading text-lg font-bold text-dark-950">
+              <AnimatedValue value={currentRevenue} />
+            </p>
           </div>
           <div className="flex h-[132px] flex-col justify-between rounded-2xl bg-bg-2 px-3 py-4">
             <div className="flex items-start gap-2">
               <Target className="mt-0.5 size-4 text-success-500" strokeWidth={2} />
               <p className="font-body text-sm text-[#5e6278]">Target Revenue</p>
             </div>
-            <p className="font-heading text-lg font-bold text-dark-950">{targetRevenue}</p>
+            <p className="font-heading text-lg font-bold text-dark-950">
+              <AnimatedValue value={targetRevenue} />
+            </p>
           </div>
         </div>
       </div>

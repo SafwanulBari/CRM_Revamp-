@@ -1,4 +1,8 @@
+"use client";
+
 import { Medal, Award, Gem } from "lucide-react";
+import { useEnterAnimation } from "@/hooks/useEnterAnimation";
+import { AnimatedValue } from "./AnimatedValue";
 import type { WeeklyIncentiveMilestone } from "@/lib/dashboard/types";
 
 const TIER_STYLES: Record<number, { icon: typeof Medal; bg: string; ring: string }> = {
@@ -27,13 +31,17 @@ export function WeeklyIncentiveCard({
   remaining: number;
 }) {
   const tierMilestones = milestones.filter((m) => m.amount > 0);
+  const entered = useEnterAnimation();
+  const animatedProgress = entered ? progressPercent : 0;
 
   return (
     <div className="flex h-full w-full flex-col gap-5 rounded-3xl bg-white p-5">
       <div className="flex items-center justify-between">
         <h3 className="font-heading text-[15px] font-bold text-dark-950 uppercase">Weekly Incentive</h3>
       </div>
-      <p className="font-heading text-2xl font-extrabold text-primary-500">$ {current}</p>
+      <p className="font-heading text-2xl font-extrabold text-primary-500">
+        $ <AnimatedValue value={String(current)} />
+      </p>
 
       <div className="relative mt-2 flex flex-col">
         <div className="relative h-5 w-full">
@@ -49,10 +57,13 @@ export function WeeklyIncentiveCard({
         </div>
 
         <div className="relative mt-5 h-2.5 w-full rounded-full bg-purple-light">
-          <div className="h-full rounded-full bg-primary-500" style={{ width: `${progressPercent}%` }} />
           <div
-            className="absolute top-1/2 size-5 -translate-y-1/2 -translate-x-1/2 rounded-full border-4 border-primary-500 bg-white"
-            style={{ left: `${progressPercent}%` }}
+            className="h-full rounded-full bg-primary-500 transition-[width] duration-[1100ms] ease-out"
+            style={{ width: `${animatedProgress}%` }}
+          />
+          <div
+            className="absolute top-1/2 size-5 -translate-y-1/2 -translate-x-1/2 rounded-full border-4 border-primary-500 bg-white transition-[left] duration-[1100ms] ease-out"
+            style={{ left: `${animatedProgress}%` }}
           />
         </div>
 

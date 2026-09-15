@@ -1,4 +1,5 @@
 import { HandCoins, ShoppingBasket, Target, Trophy, type LucideIcon } from "lucide-react";
+import { AnimatedValue } from "./AnimatedValue";
 import type { StatCardData } from "@/lib/dashboard/types";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -22,7 +23,7 @@ export function StatCardsRow({ cards }: { cards: StatCardData[] }) {
               <p className="font-body text-sm font-medium text-gray-800 uppercase">{card.label}</p>
             </div>
             <p className="font-heading text-[28px] font-bold text-dark-950">
-              {card.value}
+              <AnimatedValue value={card.value} />
               {card.suffix && <span className="font-heading text-lg font-medium text-dark-700">{card.suffix}</span>}
             </p>
           </div>

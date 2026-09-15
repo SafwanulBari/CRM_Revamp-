@@ -1,4 +1,5 @@
 import { Phone, PhoneOutgoing, PhoneForwarded, PhoneOff, History, Headphones, type LucideIcon } from "lucide-react";
+import { AnimatedValue } from "./AnimatedValue";
 import type { CallStat } from "@/lib/dashboard/types";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -28,7 +29,9 @@ export function CallsSummaryCard({ stats }: { stats: CallStat[] }) {
                   </div>
                   <span className="font-body text-sm text-dark-950">{stat.label}</span>
                 </div>
-                <span className="font-heading text-lg font-bold text-dark-950">{stat.value}</span>
+                <span className="font-heading text-lg font-bold text-dark-950">
+                  {stat.id === "call-duration" ? stat.value : <AnimatedValue value={stat.value} />}
+                </span>
               </div>
               {index !== stats.length - 1 && <div className="h-px w-full bg-gray-200" />}
             </div>

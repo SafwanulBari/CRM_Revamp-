@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { AnimatedValue } from "./AnimatedValue";
 import type { RevenuePoint, RevenueRange } from "@/lib/dashboard/types";
 
 const RANGE_OPTIONS: { id: RevenueRange; label: string }[] = [
@@ -21,13 +23,16 @@ export function WeeklyRevenueTrendCard({
   const dataKey = range === "thisWeek" ? "thisWeek" : "lastWeek";
   const totals = totalsByRange[range];
   const isPositive = totals.changePercent >= 0;
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <div className="flex h-full w-full flex-col gap-4 rounded-3xl bg-white p-5">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <h3 className="font-heading text-[15px] font-bold text-dark-950 uppercase">Weekly Revenue Trend</h3>
-          <p className="font-heading text-2xl font-extrabold text-primary-500">{totals.total}</p>
+          <p className="font-heading text-2xl font-extrabold text-primary-500">
+            <AnimatedValue value={totals.total} />
+          </p>
         </div>
         <Tabs value={range} onValueChange={(v) => setRange(v as RevenueRange)}>
           <TabsList className="h-7 bg-gray-200 p-0.5">
@@ -81,7 +86,9 @@ export function WeeklyRevenueTrendCard({
               fill="url(#revenueFill)"
               dot={{ r: 3, fill: "white", stroke: "var(--color-primary-500)", strokeWidth: 2 }}
               activeDot={{ r: 5 }}
-              isAnimationActive={false}
+              isAnimationActive={!prefersReducedMotion}
+              animationDuration={1100}
+              animationEasing="ease-out"
             />
           </AreaChart>
         </ResponsiveContainer>

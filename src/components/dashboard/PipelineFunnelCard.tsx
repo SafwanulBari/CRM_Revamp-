@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Users, UserSearch, UserCheck, Sparkles, CircleDollarSign, CheckCircle2, Info, type LucideIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEnterAnimation } from "@/hooks/useEnterAnimation";
+import { AnimatedValue } from "./AnimatedValue";
 import type { FunnelRange, FunnelStageId, PipelineFunnelStage } from "@/lib/dashboard/types";
 
 const STAGE_ICONS: Record<FunnelStageId, LucideIcon> = {
@@ -30,6 +32,7 @@ export function PipelineFunnelCard({
 }) {
   const [range, setRange] = useState<FunnelRange>("today");
   const stages = stagesByRange[range] ?? [];
+  const entered = useEnterAnimation();
 
   return (
     <div className="flex h-full w-full flex-col gap-5 rounded-3xl bg-white p-5">
@@ -59,15 +62,27 @@ export function PipelineFunnelCard({
           </Tabs>
         </div>
         <p className="font-body text-sm text-gray-700">
-          Conversion Rate <span className="font-heading text-lg font-bold text-primary-500">{conversionRateByRange[range]}%</span>
+          Conversion Rate{" "}
+          <span className="font-heading text-lg font-bold text-primary-500">
+            <AnimatedValue value={`${conversionRateByRange[range]}%`} />
+          </span>
         </p>
       </div>
 
       <div className="grid grid-cols-6 gap-2">
-        {stages.map((stage) => {
+        {stages.map((stage, index) => {
           const Icon = STAGE_ICONS[stage.id];
+          const delay = index * 90;
           return (
-            <div key={stage.id} className={`flex flex-col items-center gap-3 rounded-2xl px-2 py-4 ${stage.bgClass}`}>
+            <div
+              key={stage.id}
+              className={`flex flex-col items-center gap-3 rounded-2xl px-2 py-4 transition-all duration-500 ease-out ${stage.bgClass}`}
+              style={{
+                opacity: entered ? 1 : 0,
+                transform: entered ? "translateY(0)" : "translateY(6px)",
+                transitionDelay: `${delay}ms`,
+              }}
+            >
               <span className="font-body text-xs font-semibold" style={{ color: stage.color }}>
                 {stage.label}
               </span>
@@ -76,9 +91,13 @@ export function PipelineFunnelCard({
               </div>
               <div className="flex flex-col items-center">
                 <span className="font-heading text-base font-extrabold" style={{ color: stage.color }}>
-                  {stage.count}
+                  <AnimatedValue value={String(stage.count)} duration={700} delay={delay} />
                 </span>
-                {stage.percent != null && <span className="font-heading text-[10px] font-medium text-gray-700">{stage.percent}%</span>}
+                {stage.percent != null && (
+                  <span className="font-heading text-[10px] font-medium text-gray-700">
+                    <AnimatedValue value={`${stage.percent}%`} duration={700} delay={delay} />
+                  </span>
+                )}
               </div>
             </div>
           );
